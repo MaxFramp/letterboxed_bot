@@ -31,14 +31,15 @@ def find_words(letter_side):
     d = enchant.Dict("en_US")
 
     words_list = []
-    prev_letter_side = 0
 
     for word in dictionary:
+        prev_letter_side = 0
         word_ok = True
         for letter in word:
             if letter not in letter_side.keys() or (letter_side[str(letter)]
                                                     == prev_letter_side):
                 word_ok = False
+                break
             else:
                 prev_letter_side = letter_side[letter]
         if word_ok and (len(word) >= 4) and (word
