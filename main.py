@@ -1,6 +1,6 @@
 import json
 
-import enchant
+from textblob import TextBlob
 import numpy as np
 
 
@@ -28,21 +28,20 @@ def find_words(letter_side):
     with open('filter.json') as file:
         bad_words = json.load(file)
 
-    d = enchant.Dict("en_US")
-
     words_list = []
-    prev_letter_side = 0
 
     for word in dictionary:
+        prev_letter_side = 0
         word_ok = True
         for letter in word:
             if letter not in letter_side.keys() or (letter_side[str(letter)]
                                                     == prev_letter_side):
                 word_ok = False
+                break
             else:
                 prev_letter_side = letter_side[letter]
         if word_ok and (len(word) >= 4) and (word
-                                             not in bad_words) and (d.check(word)):
+                                             not in bad_words) and TextBlob(word).correct():
             words_list.append(word)
 
     return words_list
